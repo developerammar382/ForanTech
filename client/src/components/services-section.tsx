@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "wouter";
 import { Brain, Cloud, Shield } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -11,6 +14,7 @@ interface Service {
   title: string;
   description: string;
   details: string;
+  link: string;
 }
 
 const services: Service[] = [
@@ -19,18 +23,21 @@ const services: Service[] = [
     title: "AI Solutions",
     description: "Intelligent automation and machine learning",
     details: "Transform your business with cutting-edge artificial intelligence and machine learning solutions. From predictive analytics to natural language processing, we deliver intelligent systems that drive innovation.",
+    link: "/services/ai",
   },
   {
     icon: Cloud,
     title: "Cloud Infrastructure",
     description: "Scalable and secure cloud architecture",
     details: "Build resilient, scalable cloud infrastructure tailored to your needs. We provide comprehensive cloud migration, optimization, and management services across all major platforms.",
+    link: "/services/cloud",
   },
   {
     icon: Shield,
     title: "Cybersecurity",
     description: "Advanced protection for your digital assets",
     details: "Protect your organization with enterprise-grade cybersecurity solutions. Our comprehensive approach includes threat detection, incident response, and continuous security monitoring.",
+    link: "/services/cybersecurity",
   },
 ];
 
@@ -168,9 +175,12 @@ export function ServicesSection() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="text-center">
-                      <p className="text-sm text-muted-foreground">
-                        Tap to learn more
-                      </p>
+                      <Link href={service.link}>
+                        <Button variant="ghost" className="text-chart-2 hover:text-chart-2/80" data-testid={`button-view-service-${index}`}>
+                          View Details
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
 
@@ -188,10 +198,16 @@ export function ServicesSection() {
                         {service.title}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-4">
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {service.details}
                       </p>
+                      <Link href={service.link}>
+                        <Button variant="default" className="w-full" data-testid={`button-learn-more-${index}`}>
+                          Learn More
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
                 </div>
