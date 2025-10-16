@@ -1,34 +1,14 @@
-import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight } from "lucide-react";
 import type { BlogPost } from "@shared/schema";
 
 export function BlogSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
   const { data: blogPosts, isLoading } = useQuery<BlogPost[]>({
     queryKey: ["/api/blog"],
   });
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -41,14 +21,15 @@ export function BlogSection() {
   return (
     <section
       id="blog"
-      ref={sectionRef}
       className="py-20 lg:py-32 bg-card"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div
-          className={`text-center mb-16 transition-all duration-1000 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight">
             Latest Insights
@@ -56,7 +37,7 @@ export function BlogSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Stay updated with the latest trends and innovations in technology
           </p>
-        </div>
+        </motion.div>
 
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -77,14 +58,12 @@ export function BlogSection() {
         ) : blogPosts && blogPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => (
-              <div
+              <motion.div
                 key={post.id}
-                className={`transition-all duration-700 ${
-                  isVisible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <Card className="overflow-hidden hover-elevate active-elevate-2 h-full flex flex-col group cursor-pointer" data-testid={`card-blog-${post.id}`}>
                   <div className="relative h-48 overflow-hidden bg-muted">
@@ -117,7 +96,7 @@ export function BlogSection() {
                     </Button>
                   </CardContent>
                 </Card>
-              </div>
+              </motion.div>
             ))}
           </div>
         ) : (

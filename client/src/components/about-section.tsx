@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { Target, Users, Award, TrendingUp } from "lucide-react";
 
 const values = [
@@ -25,30 +25,9 @@ const values = [
 ];
 
 export function AboutSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
       id="about"
-      ref={sectionRef}
       className="py-20 lg:py-32 bg-primary text-primary-foreground relative overflow-hidden"
     >
       <div className="absolute inset-0 opacity-10">
@@ -60,12 +39,11 @@ export function AboutSection() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div
-            className={`transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-8"
-            }`}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
               About ForanTech
@@ -107,15 +85,13 @@ export function AboutSection() {
                 <div className="text-sm text-primary-foreground/80">Support Available</div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div
-            className={`transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-8"
-            }`}
-            style={{ transitionDelay: "200ms" }}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h3 className="text-2xl lg:text-3xl font-bold mb-8">Our Core Values</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -139,7 +115,7 @@ export function AboutSection() {
                 );
               })}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

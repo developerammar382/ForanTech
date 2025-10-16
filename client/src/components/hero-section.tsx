@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import heroImage from "@assets/generated_images/Futuristic_tech_hero_background_6fa13d09.png";
 
 export function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   const scrollToContact = () => {
     const element = document.getElementById("contact");
     if (element) {
@@ -52,28 +46,39 @@ export function HeroSection() {
       />
 
       <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 py-32 lg:py-40 text-center">
-        <div
-          className={`transition-all duration-1000 ${
-            isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <h1
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
             style={{ letterSpacing: "-0.02em" }}
           >
             Innovating the Future
             <br />
             <span className="text-chart-2">with Technology</span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-12 leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-12 leading-relaxed"
+          >
             Empowering businesses with cutting-edge AI solutions, cloud
             infrastructure, and cybersecurity services for the digital age.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
             <Button
               size="lg"
               onClick={scrollToContact}
@@ -96,11 +101,16 @@ export function HeroSection() {
             >
               Explore Services
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce"
+      >
         <svg
           className="w-6 h-6 text-white/60"
           fill="none"
@@ -112,7 +122,7 @@ export function HeroSection() {
         >
           <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,36 +1,17 @@
-import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useEmblaCarousel from "embla-carousel-react";
+import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import type { Testimonial } from "@shared/schema";
 
 export function TestimonialsSection() {
-  const [isVisible, setIsVisible] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   const { data: testimonials, isLoading } = useQuery<Testimonial[]>({
     queryKey: ["/api/testimonials"],
   });
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
@@ -38,14 +19,15 @@ export function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      ref={sectionRef}
       className="py-20 lg:py-32 bg-card"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div
-          className={`text-center mb-16 transition-all duration-1000 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight">
             Client Success Stories
@@ -53,7 +35,7 @@ export function TestimonialsSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Hear from the leaders who trust us to transform their businesses
           </p>
-        </div>
+        </motion.div>
 
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

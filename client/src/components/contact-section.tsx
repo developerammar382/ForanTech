@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,8 +40,6 @@ const contactInfo = [
 ];
 
 export function ContactSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   const form = useForm<InsertContactSubmission>({
@@ -74,23 +72,6 @@ export function ContactSection() {
     },
   });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   const onSubmit = (data: InsertContactSubmission) => {
     mutation.mutate(data);
   };
@@ -98,16 +79,17 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      ref={sectionRef}
       className="py-20 lg:py-32 bg-background relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-chart-2/5 via-transparent to-primary/5" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div
-          className={`text-center mb-16 transition-all duration-1000 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4 tracking-tight">
             Get In Touch
@@ -115,15 +97,15 @@ export function ContactSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Ready to transform your business? Let's discuss how we can help you achieve your goals.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-12">
-          <div
-            className={`lg:col-span-3 transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-8"
-            }`}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-3"
           >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -221,15 +203,14 @@ export function ContactSection() {
                 </Button>
               </form>
             </Form>
-          </div>
+          </motion.div>
 
-          <div
-            className={`lg:col-span-2 transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-8"
-            }`}
-            style={{ transitionDelay: "200ms" }}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-2"
           >
             <div className="space-y-8">
               <div>
@@ -289,7 +270,7 @@ export function ContactSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
